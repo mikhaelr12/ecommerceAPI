@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import md.practice.ecommerceapi.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -25,7 +26,7 @@ public class User implements UserDetails {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "passowrd", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "role")
@@ -34,6 +35,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); // Map role to authority
     }
 }
