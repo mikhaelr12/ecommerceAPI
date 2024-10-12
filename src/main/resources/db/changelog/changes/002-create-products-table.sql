@@ -5,5 +5,5 @@ create table products(
 );
 
 alter table products owner to root;
-create sequence products_id_seq;
-alter sequence products_id_seq owner to root;
+create sequence product_id_seq;
+alter sequence product_id_seq owner to root;

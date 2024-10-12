@@ -6,5 +6,5 @@ create table carts(
 );
 
 alter table carts owner to root;
-create sequence carts_id_seq;
-alter sequence carts_id_seq owner to root;
+create sequence cart_id_seq;
+alter sequence cart_id_seq owner to root;

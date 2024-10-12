@@ -6,5 +6,5 @@ create table users(
 );
 
 alter table users owner to root;
-create sequence users_id_seq;
-alter sequence users_id_seq owner to root;
+create sequence user_id_seq;
+alter sequence user_id_seq owner to root;
