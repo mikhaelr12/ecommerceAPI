@@ -1,5 +1,6 @@
 package md.practice.ecommerceapi.controller;
 
+import lombok.AllArgsConstructor;
 import md.practice.ecommerceapi.dto.ProductDTO;
 import md.practice.ecommerceapi.service.ProductsService;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@AllArgsConstructor
 public class ProductsController {
 
     private  ProductsService productsService;
