@@ -1,9 +1,16 @@
 package md.practice.ecommerceapi.service;
 
+import md.practice.ecommerceapi.dto.CartDTO;
 import md.practice.ecommerceapi.dto.ProductDTO;
 
 import java.util.List;
 
 public interface ProductsService {
     List<ProductDTO> getAllProducts();
+
+    void createCart(CartDTO cartDTO, String jwt);
+
+    void addToCart(CartDTO cartDTO, String jwt);
+
+    void removeFromCart(CartDTO cartDTO, String jwt);
 }

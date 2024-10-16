@@ -2,6 +2,7 @@ package md.practice.ecommerceapi.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import md.practice.ecommerceapi.enums.Status;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "carts")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
@@ -24,7 +26,7 @@ public class Cart {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "carts_products",
-            joinColumns =@JoinColumn(name = "card_id"),
+            joinColumns =@JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private Set<Product> products;
@@ -35,4 +37,8 @@ public class Cart {
 
     @Column(name = "total")
     private Double total;
+
+    @Column(name = "user_id")
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_CART"))
+    private Long userId;
 }
