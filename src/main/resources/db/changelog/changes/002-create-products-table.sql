@@ -1,7 +1,7 @@
 create table products(
     id bigint not null primary key,
     product_name varchar(255) not null ,
-    price double precision
+    price decimal(10, 2)
 );
 
 alter table products owner to root;

@@ -8,9 +8,5 @@ import java.util.List;
 public interface ProductsService {
     List<ProductDTO> getAllProducts();
 
-    void createCart(CartDTO cartDTO, String jwt);
 
-    void addToCart(CartDTO cartDTO, String jwt);
-
-    void removeFromCart(CartDTO cartDTO, String jwt);
 }

@@ -15,18 +15,18 @@ public class ProductManagerController {
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         productManagerService.addProduct(productDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Product created");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productManagerService.removeProduct(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Product deleted with id " + id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         productManagerService.udpatePrice(productDTO, id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Product updated with id " + id);
     }
 }

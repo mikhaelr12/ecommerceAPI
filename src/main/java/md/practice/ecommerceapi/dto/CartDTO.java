@@ -10,4 +10,5 @@ import java.util.Set;
 public class CartDTO {
     private Long id;
     private Set<Long> productsId;
+    private Double total;
 }
