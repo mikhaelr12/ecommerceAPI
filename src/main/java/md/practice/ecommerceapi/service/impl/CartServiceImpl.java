@@ -27,13 +27,13 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
-    private User getUser(String jwtToken) {
+    public User getUser(String jwtToken) {
         String username = jwtService.extractUsername(jwtToken);
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException("No user found"));
     }
 
-    private Set<Product> getProductsByIds(Set<Long> productIds) {
+    public Set<Product> getProductsByIds(Set<Long> productIds) {
         Set<Product> products = new HashSet<>();
         for (Long productId : productIds) {
             Product product = productsRepository.findById(productId)
@@ -43,7 +43,7 @@ public class CartServiceImpl implements CartService {
         return products;
     }
 
-    private Double calculatePrice(Set<Product> products) {
+    public Double calculatePrice(Set<Product> products) {
         return products.stream()
                 .mapToDouble(Product::getPrice)
                 .sum();
@@ -53,10 +53,12 @@ public class CartServiceImpl implements CartService {
     public void createCart(Set<Long> productIds, String jwt) {
         User user = getUser(jwt);
 
-        boolean inProgress = cartRepository.getAllCartsByUserId(user.getId()).stream()
-                .anyMatch(cart -> cart.getStatus() == Status.IN_PROGRESS);
+//        boolean inProgress = cartRepository.getAllCartsByUserId(user.getId()).stream()
+//                .anyMatch(cart -> cart.getStatus() == Status.IN_PROGRESS);
 
-        if (inProgress) {
+        Cart cart = cartRepository.getByUserId(user.getId());
+
+        if (cart != null) {
             throw new CartException("Cart is already in progress. Finish it before creating a new one.");
         }
 
