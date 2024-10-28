@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class ProductsServiceImpl implements ProductsService {
 
     private final ProductsRepository productsRepository;
+
     @Override
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productsRepository.findAll();

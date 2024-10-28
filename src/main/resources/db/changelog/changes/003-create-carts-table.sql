@@ -1,8 +1,9 @@
 create table carts(
     id bigint not null primary key,
-    total double precision,
-    status varchar(255)
-
+    total decimal(10, 2),
+    status varchar(255),
+    user_id bigint,
+    constraint FK_USER_CART foreign key (user_id) references users (id)
 );
 
 alter table carts owner to root;

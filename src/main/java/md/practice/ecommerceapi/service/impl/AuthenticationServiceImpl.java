@@ -3,6 +3,7 @@ package md.practice.ecommerceapi.service.impl;
 import lombok.AllArgsConstructor;
 import md.practice.ecommerceapi.dto.UserDTO;
 import md.practice.ecommerceapi.entity.User;
+import md.practice.ecommerceapi.enums.Role;
 import md.practice.ecommerceapi.exception.UserException;
 import md.practice.ecommerceapi.repository.UserRepository;
 import md.practice.ecommerceapi.service.AuthenticationService;
@@ -25,9 +26,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new UserException("Username is already in use");
         }
         User newUser = new User();
+        if(input.getRole() == null)
+            newUser.setRole(Role.USER);
+        else
+            newUser.setRole(input.getRole());
         newUser.setUsername(input.getUsername());
         newUser.setPassword(passwordEncoder.encode(input.getPassword()));
-        newUser.setRole(input.getRole());
         userRepository.save(newUser);
     }
 

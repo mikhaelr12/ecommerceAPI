@@ -23,7 +23,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO input) {
         authenticationService.signup(input);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Successful registration");
     }
 
     @PostMapping("/login")
