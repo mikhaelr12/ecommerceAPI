@@ -27,13 +27,13 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
-    private User getUser(String jwtToken) {
+    public User getUser(String jwtToken) {
         String username = jwtService.extractUsername(jwtToken);
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException("No user found"));
     }
 
-    private Set<Product> getProductsByIds(Set<Long> productIds) {
+    public Set<Product> getProductsByIds(Set<Long> productIds) {
         Set<Product> products = new HashSet<>();
         for (Long productId : productIds) {
             Product product = productsRepository.findById(productId)
@@ -43,61 +43,43 @@ public class CartServiceImpl implements CartService {
         return products;
     }
 
-    private Double calculatePrice(Set<Product> products) {
+    public Double calculatePrice(Set<Product> products) {
         return products.stream()
                 .mapToDouble(Product::getPrice)
                 .sum();
     }
 
-    @Override
-    public void createCart(Set<Long> productIds, String jwt) {
-        User user = getUser(jwt);
-
-        boolean inProgress = cartRepository.getAllCartsByUserId(user.getId()).stream()
-                .anyMatch(cart -> cart.getStatus() == Status.IN_PROGRESS);
-
-        if (inProgress) {
-            throw new CartException("Cart is already in progress. Finish it before creating a new one.");
-        }
-
-        Set<Product> products = getProductsByIds(productIds);
-
-        Cart newCart = Cart.builder()
-                .status(Status.IN_PROGRESS)
-                .products(products)
-                .userId(user.getId())
-                .total(calculatePrice(products))
-                .build();
-
-        cartRepository.save(newCart);
-    }
 
     @Override
     public void addToCart(Set<Long> productIds, String jwt) {
         User user = getUser(jwt);
         Cart cart = cartRepository.getByUserId(user.getId());
-        if (cart == null) {
-            throw new CartException("Cart not found");
-        }
 
-        Set<Product> newProducts = getProductsByIds(productIds);
-        Set<Product> currentProducts = cart.getProducts();
+        if (cart != null) {
+            Set<Product> currentProducts = cart.getProducts();
+            Set<Product> newProducts = getProductsByIds(productIds);
 
-        Set<Product> productsToAdd = new HashSet<>();
-
-        for (Product newProduct : newProducts) {
-            if (!currentProducts.contains(newProduct)) {
-                productsToAdd.add(newProduct); // Add to the products to add
-            } else {
-                System.out.println("Product with ID " + newProduct.getId() + " is already in the cart.");
+            for (Product newProduct : newProducts) {
+                if (currentProducts.contains(newProduct)) {
+                    throw new CartException("Product with ID " + newProduct.getId() + " is already in the cart.");
+                }
             }
+
+            currentProducts.addAll(newProducts);
+            cart.setTotal(cart.getTotal() + calculatePrice(newProducts));
+            cartRepository.save(cart);
+        } else {
+            Set<Product> products = getProductsByIds(productIds);
+            Cart newCart = Cart.builder()
+                    .status(Status.IN_PROGRESS)
+                    .products(products)
+                    .userId(user.getId())
+                    .total(calculatePrice(products))
+                    .build();
+            cartRepository.save(newCart);
         }
-
-        currentProducts.addAll(productsToAdd);
-
-        cart.setTotal(cart.getTotal() + calculatePrice(productsToAdd));
-        cartRepository.save(cart);
     }
+
 
 
 
@@ -125,7 +107,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO getCart(String jwt) {
         User user = getUser(jwt);
-        Map<Integer, Integer> map = new HashMap<>();
         Cart cart = cartRepository.getByUserId(user.getId());
         if (cart == null) {
             throw new CartException("Cart not found");

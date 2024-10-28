@@ -7,6 +7,8 @@ import java.util.Set;
 
 @Getter @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CartDTO {
     private Long id;
     private Set<Long> productsId;

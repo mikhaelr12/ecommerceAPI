@@ -26,14 +26,6 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCart(jwt));
     }
 
-    @PostMapping()
-    public ResponseEntity<?> createCart(@RequestBody Set<Long> productIds,
-                                        @RequestHeader("Authorization") String token) {
-        String jwt = getToken(token);
-        cartService.createCart(productIds, jwt);
-        return ResponseEntity.status(201).body("Cart created");
-    }
-
     @PutMapping("/add")
     public ResponseEntity<?> addToCart(@RequestBody Set<Long> productIds,
                                        @RequestHeader("Authorization") String token){
