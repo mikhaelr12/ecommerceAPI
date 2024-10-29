@@ -80,9 +80,6 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-
-
-
     @Override
     public void removeFromCart(Set<Long> productIds, String jwt) {
         User user = getUser(jwt);
