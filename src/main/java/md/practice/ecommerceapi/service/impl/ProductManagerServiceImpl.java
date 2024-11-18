@@ -34,7 +34,7 @@ public class ProductManagerServiceImpl implements ProductManagerService {
     }
 
     @Override
-    public void udpatePrice(ProductDTO productDTO, Long id) {
+    public void updatePrice(ProductDTO productDTO, Long id) {
         Optional<Product> product = productsRepository.findById(id);
         if (product.isEmpty()) {
             throw new ProductException("No product found with id " + id);

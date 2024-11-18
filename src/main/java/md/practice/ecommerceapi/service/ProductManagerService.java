@@ -7,5 +7,5 @@ public interface ProductManagerService {
 
     void removeProduct(Long id);
 
-    void udpatePrice(ProductDTO productDTO, Long id);
+    void updatePrice(ProductDTO productDTO, Long id);
 }
